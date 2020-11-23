@@ -29,6 +29,12 @@ const styles = () => ({
       margin: '0 1rem',
     },
   },
+  footer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap'
+  }
 });
 
 function Footer(props) {
@@ -36,34 +42,25 @@ function Footer(props) {
   return (
     <footer className={classes.root}>
       <Section className={classes.section}>
-        <Typography variant="body1">
-          Copyright &copy; {new Date().getFullYear()}. SmartSAVER.org
-        </Typography>
-        <Typography classes={{ root: classes.links }} variant="body1">
-          <Link
-            href="https://www.smartsaver.org/privacy.shtml"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            PRIVACY POLICY
-          </Link>
-          |
-          <Link
-            href="https://www.smartsaver.org/terms-conditions.shtml"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            TERMS & CONDITIONS
-          </Link>
-          |
-          <Link
-            href="http://community.smartsaver.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            COMMUNITY SITE
-          </Link>
-        </Typography>
+        <div className={classes.footer}>
+          <div>
+            <p>
+            <b>For more information, contact:</b> <br/>
+            <u><b>City of Toronto</b></u> <br/>
+              Contact: 311 <br/>
+              TTY: 416-0TTY (0889) <br />
+              Website: <a href="https://www.toronto.ca/">Toronto.ca</a>
+            </p>
+          </div>
+          <div>
+            <p>
+              <u><b>Canada Learning Bond/Federal Government</b></u> <br/>
+              Contact: 1 800 O-Canada (1-800-622-6232) <br/>
+              TTY Call Centre: 1-800-926-9105 <br />
+              Website: <a href="https://www.canada.ca/en/employment-social-development/services/learning-bond.html">Canada.ca</a>
+            </p>
+          </div>
+        </div>
       </Section>
     </footer>
   );

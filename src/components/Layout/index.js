@@ -46,33 +46,18 @@ function Layout(props) {
   let navbarLogo = navbarLogoEn;
   const ApplyButton = () => (
     <Button variant="contained" color="primary">
-      {(props.locale == "en") ? "Submit" : "Envoyer"}
+      Submit
     </Button>
   );
-  const LocaleButtonList = () => (
-    <>
-      <Button onClick={handleLocaleClick} variant="text">
-        en
-      </Button>
-      <span> / </span>
-      <Button onClick={handleLocaleClick} variant="text">
-        fr
-      </Button>
-    </>
-  );
-  const handleLocaleClick = event => {
-    const locale = event.target.textContent;
-    props.onLocaleChange(locale);
-  };
   return (
     <>
       <Navbar
         brand={
-          <img className={classes.navbarLogo} src={(props.locale == "en") ? navbarLogoEn : navbarLogoFr} alt="ESIC" />
+          <img className={classes.navbarLogo} src={(props.locale == "en") ? navbarLogoEn : navbarLogoFr} alt="CLB Toronto" />
         }
         menuEnd={
           <>
-            <a href={(props.locale == "en") ? "./#submit" : "./#envoyer"} className={classes.linkButton}>
+            <a href="./#submit" className={classes.linkButton}>
               <ApplyButton />
             </a>
             <Typography
@@ -80,7 +65,6 @@ function Layout(props) {
               variant="body1"
               component="div"
             >
-              <LocaleButtonList />
             </Typography>
           </>
         }
@@ -91,13 +75,13 @@ function Layout(props) {
                 <ApplyButton />
               </ListItem>
             </a>
-            <ListItem className={classes.drawerItem}>
-              <LocaleButtonList />
-            </ListItem>
           </NavbarDrawer>
         )}
       />
       {props.children}
+      <div>
+        <br/>
+      </div>
       <Footer />
     </>
   );

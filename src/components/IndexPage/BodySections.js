@@ -2,12 +2,16 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Section from '../Section';
 import EscapedHtml from '../EscapedHtml';
+import howItWorks1 from '../../images/howitworks01.svg';
+import howItWorks2 from '../../images/howitworks02.svg';
+import howItWorks3 from '../../images/howitworks03.svg';
+import CLBCalc from '../../images/CLBCalc-en-US.png';
 import './bodySections.css';
 import { Typography, LinearProgress, Button, TextField, Select, MenuItem, FormControl, FormHelperText } from '@material-ui/core';
 
 const axios = require('axios');
 
-const styles = {
+const styles = theme => ({
   formLayout: {
     display: "flex",
     flexDirection: "column",
@@ -21,10 +25,104 @@ const styles = {
   valid: {
     color: "green"
   },
+  centerText: {
+    textAlign: "center"
+  },
   invalid: {
     color: "red"
+  },
+  blue: {
+    color: "#015994"
+  },
+  padded: {
+    padding: '1rem 1rem',
+    [theme.breakpoints.up('md')]: {
+      padding: '1.5rem 4rem',
+    },
+    [theme.breakpoints.up('lg')]: {
+      padding: '1.5rem 8rem',
+    },
+  },
+  subheaderTitle: {
+    color: "#015994",
+    textAlign: "center"
+  },
+  iframe: {
+    width: "100%",
+    margin: "1rem 0",
+    background: "white",
+    minHeight: "43rem",
+  },
+  flexSteps: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin: "2rem auto",
+    maxWidth: "60rem",
+    flexWrap: "wrap",
+  },
+  flexStepsBlueBack: {
+    display: 'flex',
+    backgroundColor: '#015994',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    maxWidth: "100vw",
+    flexWrap: "wrap",
+    paddingBottom: "20px",
+    color: "white"
+  },
+  flexStepDiv: {
+    display: 'flex',
+    width: '20rem',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    textAlign: "center"
+  },
+  flexDYKDiv: {
+    display: 'flex',
+    width: '33vh',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    textAlign: "center"
+  },
+  flexDiv: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    textAlign: "center"
+  },
+  clbFlexDiv: {
+    display: 'flex',
+    width: '30rem',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    textAlign: "center",
+
+  },
+  clbFlexDiv1: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    textAlign: "left",
+    padding: "2% 3%",
+    flex: "1"
+  },
+  clbFlexDiv2: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    textAlign: "left",
+    backgroundColor: "#feedc2",
+    padding: "2% 3%",
+    flex: "1"
   }
-}
+});
 
 class BodySections extends React.Component {
   /**
@@ -36,310 +134,159 @@ class BodySections extends React.Component {
   constructor(props) {
     super(props);
 
-    this.freshState = {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone_number: "",
-      financial_institution: "",
-      reason: "",
-      reasonSelect: 0,
-      progress: 0,
-      finished: false
-    };
-    this.state = this.freshState;
-
-    // Max length for each field
-    this.validationParams = {
-      first_name: 30,
-      last_name: 30,
-      email: 50,
-      phone_number: 20,
-      financial_institution: 50,
-      reason: 255
-    };
-
-    this.reasons = {
-      en: {
-        0: "I never received a phone call", 
-        1: "I missed my appointment", 
-        2: "Other", 
-      },
-      fr: {
-        0: "Je n'ai jamais reçu d'appels téléphoniques",
-        1: "J'ai raté mon rendez-vous",
-        2: "Autre raison",
-      }
-    }
-
-    this.financial_institutions = {
-      en: {
-        0: "Atlantic Canada credit unions", 
-        1: "BMO", 
-        2: "CIBC", 
-        3: "Meridian", 
-        4: "National Bank", 
-        5: "RBC", 
-        6: "Scotiabank", 
-        7: "TD", 
-        8: "Vancity", 
-      },
-      fr: {
-        0: "Caisses Populaires du Canada Atlantique",
-        1: "BMO",
-        2: "CIBC",
-        3: "Meridian",
-        4: "Banque Nationale",
-        5: "Banque Royale",
-        6: "Banque Scotia",
-        7: "TD",
-        8: "Vancity",
-      }
-    }
-    
-    // Tried to get the progress bar to react in real time with this variable.  Still in progress, but useless atm.
-    this.progress = 0;
-    
-    // Submit-dependant variables
-    this.failed = false;
-    this.isSubmitting = false;
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleInputChange(event) {
-    const value = event.target.value;
-    const name = event.target.name;
-
-    this.setState({
-      [name]: value
-    });
-
-    if (this.state.reasonSelect != 2) {
-      this.setState({
-        reason: this.reasons[this.props.locale][this.state.reasonSelect]
-      })
-    }
-
-    if (name == "reasonSelect") {
-      if (value == 2) {
-        this.setState({
-          reason: ""
-        })
-      }
-    }
-    
-    ;
-    this.setState({progress: this.validateForm()})
-  }
-
-  handleSubmit(event) {
-    // Prevent form redirection; Reset submit-dependant variables
-    event.preventDefault();
-    this.isSubmitting = true;  
-    this.failed = false;
-
-    // Send english reasons to the database, if it's option 1 or 2.
-    // French optional options are in french so...
-    if (this.state.reasonSelect != 2) {
-      this.state.reason = this.reasons["en"][this.state.reasonSelect];
-    }
-
-    // Send the form to the backend  
-    this.submitForm(this.state)
-    .then( (res) => {
-
-      // If successful, set finished to true and show success message to user.
-      if (res[0]) {
-        this.setState({finished: true});
-      }
-      else {
-        console.log("An error has occurred.  If you check this out, include this in the email to info@smartsaver.org: SSAFE02", res[1]);
-        this.failed = true;
-      }  
-    })
-    .catch((err) => {
-      // If unsuccessful, inform the user and ask them to email us for assistance. 
-      console.log("An error has occurred.  If you check this out, include this in the email to info@smartsaver.org: SSAFE03", err);
-      this.failed = true;
-    })
-    .finally(() => {
-      // Unblock the submit button; Only useful if failure occurred, but it failed so they shouldn't really submit... Hmm...
-      this.isSubmitting = false;
-    });
-    return;
-  }
-
-  
-  async submitForm(assistForm) {
-    let res = await axios.post('https://reeeussite.com:3000/api/submit', assistForm)
-    .then(function (success) {
-      return success.data;
-    })
-    .catch(function (error) {
-      return [false, error];
-    })
-    return res;
-  }
-
-  validateFirstName() {
-    return (this.state.first_name.length < 2 || this.state.first_name.length > this.validationParams.first_name)
-  }
-  validateLastName() {
-    return (this.state.last_name.length < 2 || this.state.last_name.length > this.validationParams.last_name)
-  }
-  validateEmail() {
-    return (this.state.email.length < 2 || this.state.email.length > this.validationParams.email)
-  }
-  validatePhoneNumber() {
-    return (this.state.phone_number.length < 2 || this.state.phone_number.length > this.validationParams.phone_number)
-  }
-  validateFinancialInstitution() {
-    return (this.state.financial_institution.length < 2 || this.state.financial_institution.length > this.validationParams.financial_institution)
-  }
-  validateReason() {
-    return (this.state.reason.length < 2 || this.state.reason.length > this.validationParams.reason)
-  }
-
-  validateForm() {
-    this.progress = 0;
-    if (!this.validateFirstName())
-      this.progress++;
-    if (!this.validateLastName())
-      this.progress++;
-    if (!this.validateEmail())
-      this.progress++;
-    if (!this.validatePhoneNumber())
-      this.progress++;
-    if (!this.validateFinancialInstitution())
-      this.progress++;
-    if (!this.validateReason())
-      this.progress++;
-    
-      return this.progress;
-  }
-
-  isFormComplete() {
-    // if (this.state.reasonSelect == 2)
-      return this.validateForm() == 6;
-    // else
-    //   return this.state.progress >= 5; // If it's greater than 5, all the more power to ya bub!
   }
 
   render() {
-    const { content } = this.props;
+    const { content, classes } = this.props;
     return (
       <>
-      <Section>
-        <Typography variant="h1">
-          {content[this.props.locale].thankYou.title}
+      <Section className={classes.flexDiv}>
+        <Typography variant="h2">
+          <span className={classes.blue}><b>Families in the City of Toronto can start planning and saving early for their children's post-secondary education or training programs.</b></span>
         </Typography>
-        <EscapedHtml html={content[this.props.locale].thankYou.text} />
+      </Section>
+      <Section id="ThreeEasySteps" className={classes.flexDiv}>
+        <Typography variant="h3" className={classes.subheaderTitle}>
+          <b>3 Easy Steps</b>
+        </Typography>
+        <div className={classes.flexDiv}>
+          <br/>
+          <div className={classes.flexSteps}>
+            <div className={classes.flexStepDiv}>
+              <img src={howItWorks1} />
+              <span>Open a no-cost RESP and apply for the Canada Learning Bond.</span>
+              <span className={classes.blue}>Takes 10 minutes or less</span>
+            </div>
+            <div className={classes.flexStepDiv}>
+              <img src={howItWorks2} />
+              <span>Connect with the financial institution you chose in Step 1 to complete the application process.</span>
+              <span className={classes.blue}>Will take 1-2 weeks</span>
+            </div>
+            <div className={classes.flexStepDiv}>
+              <img src={howItWorks3} />
+              <span>If eligible, receive your child's Canada Learning Bond into the RESP.</span>
+              <span className={classes.blue}>Can take up to 2 months</span>
+            </div>
+          </div>
+        </div>
+      </Section>
+      <Section id="StartTheProcess" className={classes.flexDiv}>
+        <span className={classes.blue}><b>You can start the process of opening an RESP and requesting the Canada Learning Bond for your child online from the comfort of your own home! When you apply using our MySmartFUTURE application below, you will be able to select from a range of financial institutions that offer their families at-home RESP access.</b></span>
+      </Section>
+      <Section id="BeforeYouStart" className={classes.flexDiv}>
+        <Typography variant="h3" className={classes.subheaderTitle}>
+          <b>Before you start</b>
+        </Typography>
+        <br/>
+        <div className={classes.flexSteps}>
+          <div className={classes.clbFlexDiv}>
+            <div className={classes.clbFlexDiv1}>
+              <span className={classes.blue}><b>What is the Canada Learning Bond (CLB)?</b></span>
+              <span>
+              The Canada Learning Bond is a grant of $500 to $2,000 from the Federal Government of Canada 
+              to help eligible families with the cost of their child’s education after high school. 
+              The CLB is deposited directly into a Registered Education Savings Plan (RESP) for a child. 
+              Use this application to request your child’s CLB at no cost!
+              </span>
+              <br />
+              <span className={classes.blue}>
+                See how your child’s education savings could add up year by year! Try our <a href="https://www.smartsaver.org/startmyresp-calculator/#/main/en">online calculator.</a>
+              </span>
+              <span>
+                <span className={classes.blue}>Takes 10 minutes or less</span><a href="https://www.smartsaver.org/startmyresp-calculator/#/main/en"><img src={CLBCalc} /></a>
+              </span>         
+            </div>
+          </div>
+          <div className={classes.clbFlexDiv}>
+            <div className={classes.clbFlexDiv2}>
+              <span className={classes.blue}><b>Is my child eligible?</b></span>
+              <span>
+                A child is eligible for the CLB if they:
+                <ul>
+                  <li>were born on or after January 1, 2004</li>
+                  <li>are a resident of Canada</li>
+                  <li>have a valid <a href="https://www.canada.ca/en/employment-social-development/services/sin.html">Social Insurance Number</a> (SIN).</li>
+                  <li>are named in an RESP.</li>
+                </ul>
+                Plus, the parent or guardian must:
+                <ul>
+                  <li>Have a net family income under $48,535*.</li>
+                  <li>Have a <a href="https://www.canada.ca/en/employment-social-development/services/sin.html">Social Insurance Number</a> (SIN).</li>
+                  <li>Have filed taxes for at least one of the years since the eligible child was born. (<a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/community-volunteer-income-tax-program.html">Need help?</a>)</li>
+                  <li>For families with 1 to 3 children.</li>
+                </ul>
+              </span>
+              <span className={classes.blue}>Will take 1-2 weeks</span>
+            </div>
+          </div>
+        </div>
+      </Section>
+      <Section noPadding id="DidYouKnow" className={classes.flexDiv}>
+        <div className={classes.padded}>
+          <span className={classes.blue}><b>Did you know? Children with education savings of up to $500 are 3 times more likely to enroll in post-secondary and 4 times more likely to graduate.</b></span>
+        </div>
+        <div className={classes.flexDiv}>
+          <div className={classes.flexStepsBlueBack}>
+            <div className={classes.flexDYKDiv}>
+              <h3><b>I am ready to apply!</b></h3>
+              <span>
+                Visit your local branch OR follow the instructions below to open 
+                an RESP and request your child’s CLB with one of our partner 
+                financial institutions. 
+                <br />
+                There is no cost to open an RESP.
+              </span>
+            </div>
+            <div className={classes.flexDYKDiv}>
+              <h3><b>I already opened an RESP!</b></h3>
+              <span>
+              Call 1-888-276-3624 to ask if your child already receives the CLB 
+              into their RESP. 
+              <br />
+              If they don’t, contact your RESP provider to ask for assistance.
+              </span>
+            </div>
+            <div className={classes.flexDYKDiv}>
+              <h2><b>I need some help!</b></h2>
+              <ul>
+                <li>Email us at info@MySmartFUTURE.org or</li>
+                <li>Call the Canada Education Savings Program government hotline at: 1-888-276-3624</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </Section>
       <Section>
-        <Typography variant="h1">
-          {content[this.props.locale].beforeSubmitting.title}
+        <Typography variant="h3" className={classes.blue}>
+          <b>Start Saving Today for Your Child's Education Tomorrow!</b>
         </Typography>
-        <EscapedHtml html={content[this.props.locale].beforeSubmitting.text} />
+        <span>
+          <b>What do I need to open an RESP with the financial institution? (not required on the application)</b>
+          <ol>
+            <li>For the RESP:</li>
+            <input id="sinCheckbox" type="checkbox" value="sin"></input>
+            <label for="sinCheckbox">You will need to have <u>a Social Insurance Number (SIN) for you and for your child</u>, and</label>
+            <br />
+            <input id="porCheckbox" type="checkbox" value="por"></input>
+            <label for="porCheckbox"><u>Proof of residency</u> (e.g. ON Driver's Licence, ON Identification Card, ON Services Card, or recent ON utilities bill)</label>
+            <li>For the CLB:</li>
+            <input id="clbCheckbox" type="checkbox" value="por"></input>
+            <label for="clbCheckbox">
+              The child's primary caregiver (usually mom, dad, or a grandparent),&nbsp;
+              <u>must have applied for the Canada Child Benefit</u> for the child through 
+              the Canada Revenue Agency and continue to file income tax returns,
+              allowing eligibility for the Canada Learning Bond to be validated.
+            </label>
+          </ol>
+        </span>
       </Section>
-      <Section name={this.props.locale == "en" ? "submit" : "envoyer"} className={(this.state.finished) ? "hiding" : ""} >
-        <form className="formLayout" onSubmit={this.handleSubmit}>
-          <div>
-            <LinearProgress variant="determinate" value={(this.validateForm()/6) * 100} />
-          </div>
-          <br/>
-          <div className="sharedDiv">
-            <TextField variant="filled" fullWidth required placeholder="John"
-            error={this.validateFirstName()}
-            label={(this.props.locale == "en") ? "First Name:" : "Prénom:"}
-            minLength="2" maxLength="30"
-            id="first_name" name="first_name" type="text" value={this.state.first_name} onChange={this.handleInputChange} />
-
-            <TextField variant="filled" fullWidth required placeholder="Doe"
-            error={this.validateLastName()}
-            label={(this.props.locale == "en") ? "Last Name:" : "Nom:"}
-            minLength="2" maxLength="30"
-            id="last_name" name="last_name" type="text" value={this.state.last_name} onChange={this.handleInputChange} />
-          </div>
-
-          <br/>
-
-          <div className="sharedDiv">
-            <TextField variant="filled" fullWidth required placeholder="jdoe@gmail.com"
-            error={this.validateEmail()}
-            label={(this.props.locale == "en") ? "E-Mail:" : "Courriel:"}
-            minLength="2" maxLength="50"
-            id="email" name="email" type="email" value={this.state.email} onChange={this.handleInputChange} />
-
-            <TextField variant="filled" fullWidth required placeholder="9998887777"
-            error={this.validatePhoneNumber()}
-            label={(this.props.locale == "en") ? "Phone Number:" : "Prénom:"}
-            minLength="2" maxLength="20"
-            id="phone_number" name="phone_number" type="text" value={this.state.phone_number} onChange={this.handleInputChange} />
-          </div>
-
-          <br/>
-
-          <FormControl className="sharedDiv">
-            <Select
-              id="financial_institution"
-              name="financial_institution"
-              value={this.state.financial_institution}
-              required
-              onChange={this.handleInputChange}>
-                <MenuItem value={this.financial_institutions['en'][0]}>{(this.financial_institutions[this.props.locale][0])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][1]}>{(this.financial_institutions[this.props.locale][1])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][2]}>{(this.financial_institutions[this.props.locale][2])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][3]}>{(this.financial_institutions[this.props.locale][3])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][4]}>{(this.financial_institutions[this.props.locale][4])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][5]}>{(this.financial_institutions[this.props.locale][5])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][6]}>{(this.financial_institutions[this.props.locale][6])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][7]}>{(this.financial_institutions[this.props.locale][7])}</MenuItem>
-                <MenuItem value={this.financial_institutions['en'][8]}>{(this.financial_institutions[this.props.locale][8])}</MenuItem>
-            </Select>
-            <FormHelperText>{(this.props.locale == "en") ? "Financial Institution:" : "FI:"}</FormHelperText>
-          </FormControl>
-
-          <br/>
-
-          <FormControl className="sharedDiv">
-            <Select
-              id="reasonSelect"
-              name="reasonSelect"
-              value={this.state.reasonSelect}
-              onChange={this.handleInputChange}>
-                <MenuItem value={0}>{(this.reasons[this.props.locale][0])}</MenuItem>
-                <MenuItem value={1}>{(this.reasons[this.props.locale][1])}</MenuItem>
-                <MenuItem value={2}>{(this.reasons[this.props.locale][2])}</MenuItem>
-            </Select>
-            <FormHelperText>{(this.props.locale == "en") ? "I want a call back from my bank" : "Je souhaite que mon institution financière me téléphone?"}</FormHelperText>
-
-            <TextField variant="filled" fullWidth placeholder="Quarantined" className={(this.state.reasonSelect != 2) ? "hiding" : ""}
-            error={this.validateReason()}
-            label={(this.reasons[this.props.locale][2])} 
-            minLength="2" maxLength="255"
-            id="reason" name="reason" type="text" value={this.state.reason} onChange={this.handleInputChange} />
-          </FormControl>
-
-          <br/>
-
-          <Button variant="contained" type="submit" color="primary" disabled={((this.isSubmitting || !this.isFormComplete()) ? true : false)}> 
-            {(this.props.locale == "en" ? "Submit" : "Envoyer")}
-          </Button>
-
-          <div className={(!this.failed) ? "hiding" : "centered"}>
-            <Typography variant="h4">
-            {(this.props.locale == "en") ? 
-                EscapedHtml("Your application was not submitted successfully!  Please check your network, then e-mail us at <a href='mailto:info@smartsaver.org'>info@smartsaver.org</a> for further assistance.") : 
-                EscapedHtml("Votre candidature n'a pas été soumise avec succès! Veuillez vérifier votre réseau, puis envoyez-nous un courriel à <a href='mailto:info@smartsaver.org'>info@smartsaver.org</a> pour plus d'aide.")}
-            </Typography>
-          </div>
-        </form>
-      </Section>
-      <Section className={"hiding"}></Section>
-      <Section name={this.props.locale == "en" ? "submit" : "envoyer"} className={(!this.state.finished) ? "hiding" : "centered"}>
-        <Typography variant="h2">{(this.props.locale == "en") ? "Thank you!" : "Merci!" }</Typography>
+      <Section name="submit" id="submit">
+        <Typography variant="h3" className={classes.subheaderTitle}>
+          <b>I'm ready to apply!</b>
+        </Typography>
+        <br />
+        <span>If you cannot see the application form, <a href="http://www.mysmartfuture.org/TCS">click here</a>.</span>
+        <iframe id="tcs" className={classes.iframe} src="https://www.mysmartfuture.org/TCS" frameborder="0" title="StartMyResp Application"></iframe>
       </Section>
       </>
     );

@@ -23,12 +23,18 @@ const styles = theme => ({
       padding: '2.75rem 8rem',
     },
   },
+  containerNoPadding: {
+    margin: '0 auto',
+    width: '100%',
+    maxWidth: theme.breakpoints.values.xl,
+  },
 });
 
 /**
  *
  * @param {String} name - section id
  * @param {String} className - css class
+ * @param {Boolean} noContainer - Container or Nah
  * @param {*} children
  */
 
@@ -43,7 +49,7 @@ function Section(props) {
         paragraph
         variant="body1"
         component="div"
-        className={classes.container}
+        className={props.noPadding ? classes.containerNoPadding : classes.container}
       >
         {props.children}
       </Typography>

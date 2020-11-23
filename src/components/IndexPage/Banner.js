@@ -21,6 +21,9 @@ const styles = theme => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     minHeight: '28rem',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end",
     [theme.breakpoints.up('lg')]: {
       backgroundPositionY: '-3.5rem',
     },
@@ -37,6 +40,8 @@ const styles = theme => ({
       margin: '0 4rem',
       textAlign: 'center',
     },
+    marginBottom: 0,
+    position: "relative"
   },
   text: {
     color: 'white'
@@ -48,12 +53,9 @@ function Banner(props) {
   return (
     <Section className={classes.root}>
       <div className={classes.container + ' ' + classes.bannerLogo}>
-        {/* <Typography className={classes.title} variant="h2">
-          {content.title}
+        <Typography className={classes.title} variant="h2">
+          Saving for your child’s future is possible!
         </Typography>
-        <Typography variant="h4">
-          {content.text}
-        </Typography> */}
       </div>
     </Section>
   );
