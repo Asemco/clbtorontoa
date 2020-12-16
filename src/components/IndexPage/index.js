@@ -5,6 +5,7 @@ import withRoot from '../../theme/withRoot';
 import Layout from '../Layout';
 import Banner from './Banner';
 import BodySections from './BodySections';
+import 'fontsource-roboto';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = {

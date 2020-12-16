@@ -35,10 +35,17 @@ const styles = theme => ({
     margin: '0 1rem',
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
+      fontSize: '28px',
     },
     [theme.breakpoints.up('md')]: {
       margin: '0 4rem',
       textAlign: 'center',
+      fontSize: '34px',
+    },
+    [theme.breakpoints.up('lg')]: {
+      margin: '0 4rem',
+      textAlign: 'center',
+      fontSize: '40px',
     },
     marginBottom: 0,
     position: "relative"

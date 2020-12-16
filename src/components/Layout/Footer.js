@@ -42,14 +42,16 @@ function Footer(props) {
   return (
     <footer className={classes.root}>
       <Section className={classes.section}>
+        <div>
+          <span><b>For more information, contact:</b></span>
+        </div>
         <div className={classes.footer}>
           <div>
-            <p>
-            <b>For more information, contact:</b> <br/>
+            <p> 
             <u><b>City of Toronto</b></u> <br/>
               Contact: 311 <br/>
               TTY: 416-0TTY (0889) <br />
-              Website: <a href="https://www.toronto.ca/">Toronto.ca</a>
+              Website: <a href="https://www.toronto.ca/" target="_blank">Toronto.ca</a>
             </p>
           </div>
           <div>
@@ -57,7 +59,7 @@ function Footer(props) {
               <u><b>Canada Learning Bond/Federal Government</b></u> <br/>
               Contact: 1 800 O-Canada (1-800-622-6232) <br/>
               TTY Call Centre: 1-800-926-9105 <br />
-              Website: <a href="https://www.canada.ca/en/employment-social-development/services/learning-bond.html">Canada.ca</a>
+              Website: <a href="https://www.canada.ca/en/employment-social-development/services/learning-bond.html" target="_blank">Canada.ca</a>
             </p>
           </div>
         </div>
