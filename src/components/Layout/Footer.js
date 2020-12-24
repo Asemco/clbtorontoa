@@ -11,7 +11,7 @@ const styles = () => ({
     flexDirection: 'column',
     textAlign: 'center',
     minHeight: '15rem',
-    backgroundColor: '#FFF',
+    backgroundColor: '#A9A9A9',
   },
   section: {
     flex: 1,

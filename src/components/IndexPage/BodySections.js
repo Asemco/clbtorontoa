@@ -142,7 +142,7 @@ const styles = theme => ({
     display: 'flex',
     width: '33vh',
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    justifyContent: 'start',
     flexWrap: 'wrap',
     textAlign: "center"
   },
@@ -281,7 +281,10 @@ class BodySections extends React.Component {
       <Section id="StartTheProcess" className={classes.flexDiv}>
         <Typography variant="h3" className={classes.subheaderTitle}>
           <b>
-            You can start the process of opening an RESP and requesting the Canada Learning Bond from the comfort of your own home! When you apply online 
+            You can start the process of opening an RESP and requesting the Canada Learning Bond from the comfort of your own home! 
+            <br />
+            <br />
+            When you apply online
             using our MySmartFUTURE application below, you will be able to select from a range of financial institutions 
             that offer their families at-home RESP access.
           </b>
@@ -370,8 +373,8 @@ class BodySections extends React.Component {
               </span>
             </div>
             <div className={classes.flexDYKDiv}>
-              <h2><b>I need some help!</b></h2>
-                <span>Call the Canada Education Savings Program government hotline at: 1-888-276-3624</span>
+              <h3><b>I need some help!</b></h3>
+              <span>Call the Canada Education Savings Program government hotline at: 1-888-276-3624</span>
             </div>
           </div>
         </div>
@@ -384,10 +387,7 @@ class BodySections extends React.Component {
           <b>What do I need to open an RESP with the financial institution? (not required on the application)</b>
           <ol>
             <li>
-              <input id="clbCheckbox" type="checkbox" value="por"></input>
-              <label for="clbCheckbox">
-                For the CLB you will need to have a Social Insurance Number (SIN) for you and for your child.
-              </label>
+              For the CLB you will need to have a Social Insurance Number (SIN) for you and for your child.
             </li>
           </ol>
         </span>
