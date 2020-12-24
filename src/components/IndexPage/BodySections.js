@@ -398,7 +398,7 @@ class BodySections extends React.Component {
         </Typography>
         <br />
         <span>If you cannot see the application form, <a href="https://www.mysmartfuture.org/signup/TCS " target="_blank">click here</a>.</span>
-        <iframe id="tcs" className={classes.iframe} src="https://www.mysmartfuture.org/signup/TCS" frameborder="0" title="StartMyResp Application"></iframe>
+        <iframe id="tcs" className={classes.iframe} src="https://www.mysmartfuture.org/signup/TCS" frameBorder="0" title="StartMyResp Application"></iframe>
       </Section>
       </>
     );
