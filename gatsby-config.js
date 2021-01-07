@@ -25,9 +25,11 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: `gatsby-plugin-google-gtag`,
       options: {
-        trackingId: `G-DMEF4GG56V`,
+        trackingIds: [
+          `G-DMEF4GG56V`,
+        ],
       },
     },
   ],
