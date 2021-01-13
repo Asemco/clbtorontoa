@@ -19,6 +19,9 @@ const styles = theme => ({
     paddingTop: "1rem",
     paddingBottom: "1rem",
   },
+  listStyleNone:{
+    listStyle:"none"
+  },
   labels: {
     paddingBottom: ".5rem"
   },
@@ -374,7 +377,7 @@ class BodySections extends React.Component {
             </div>
             <div className={classes.flexDYKDiv}>
               <h3><b>I need some help!</b></h3>
-              <span>Call the Canada Education Savings Program government hotline at: 1-888-276-3624</span>
+              <span>Call the Canada Education Savings Program government hotline at:<br/> 1-888-276-3624</span>
             </div>
           </div>
         </div>
@@ -385,11 +388,11 @@ class BodySections extends React.Component {
         </Typography>
         <span>
           <b>What do I need to open an RESP with the financial institution? (not required on the application)</b>
-          <ol>
-            <li>
+          <ul>
+            <li className={classes.listStyleNone}>
               For the CLB you will need to have a Social Insurance Number (SIN) for you and for your child.
             </li>
-          </ol>
+          </ul>
         </span>
       </Section>
       <Section name="submit" id="submit">
