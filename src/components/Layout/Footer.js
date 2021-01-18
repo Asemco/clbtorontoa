@@ -51,7 +51,7 @@ function Footer(props) {
             <u><b>City of Toronto</b></u> <br/>
               Contact: 311 <br/>
               TTY: 416-0TTY (0889) <br />
-              Website: <a href="https://www.toronto.ca/" target="_blank">Toronto.ca</a>
+              Website: <a href="https://www.toronto.ca/clb" target="_blank">Toronto.ca/clb</a>
             </p>
           </div>
           <div>
